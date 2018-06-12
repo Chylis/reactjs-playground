@@ -1,0 +1,11 @@
+{
+  //"es2015" means: "Transpile anything that was part of the es2015 standard"
+  "presets": ["react", "es2015"],
+  "env": {
+    "development": {
+      //Run the react-hmre babel preset only in development environment.
+      //"react-hmre" bundles up a number of different hot-reloading-related code into one convenient package .
+      "presets": ["react-hmre"]
+    }
+  }
+}
