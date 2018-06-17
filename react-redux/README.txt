@@ -24,14 +24,15 @@ REQUEST FLOW:
 REDUX FLOW:
 1) All our reducers are combined into a rootReducer (reducers/index.js)
 2) A store is created with our rootReducer and some initial state in index.js
-3) The store is passed to the Redux Provider which then wraps our app and connects our components with the store
-4) Our components are wrapped/decorated by the React-Redux 'connect' function, which:
-  4.1) extracts slices from state and passes it into the props sent to the component
-  4.2) passes 'action-dispatching' functions and passes them into the props sent to the component (making it possible to dispatch actions from the component)
-5) ACTION: On user activity, our components fire away a custom-defined action (via the 'connect::dispatch' function)
-6) REDUCER: Our reducers are executed with the fired action(s) and produce new/updated state
-7) STORE: The store receives the updated state and updates all connected components
-8) REACT-REDUX: The components connect::mapStateToProps receives the new state and creates a new props
+  2.1) The store dispatches a 'loadAllCourses' action
+  2.2) The store is passed to the Redux Provider which then wraps our app and connects our components with the store
+3) Our components are wrapped/decorated by the React-Redux 'connect' function, which:
+  3.1) extracts slices from state and passes it into the props sent to the component
+  3.2) passes 'action-dispatching' functions and passes them into the props sent to the component (making it possible to dispatch actions from the component)
+4) ACTION: On user activity, our components fire away a custom-defined action (via the 'connect::dispatch' function)
+5) REDUCER: Our reducers are executed with the fired action(s) and produce new/updated state
+6) STORE: The store receives the updated state and updates all connected components
+7) REACT-REDUX: The components connect::mapStateToProps receives the new state and creates a new props
 8) REACT: The component is re-rendered with the new props (step 4)
 
 
