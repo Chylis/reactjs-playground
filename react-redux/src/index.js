@@ -6,6 +6,7 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 
 import {loadCourses} from "./actions/courseActions";
+import {loadAuthors} from "./actions/authorActions";
 
 //Webpack allows importing CSS too - it will bundle it for us.
 import './styles/styles.css';
@@ -22,8 +23,9 @@ import { Provider } from 'react-redux';
 //However, it is possible to load previously stored state from e.g. the network/db and pass it as the initialState param.
 const store = configureStore();
 
-//Dispatch an initial 'loadCourses' action
+//Dispatch some actions
 store.dispatch(loadCourses());
+store.dispatch(loadAuthors());
 
 render(
   //Provider attaches our store to our container components, making it possible to access the store from them.
