@@ -1,7 +1,9 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 import CourseForm from './CourseForm';
-import {saveCourse} from '../../actions/courseActions';
+import * as courseActions from '../../actions/courseActions';
+
 
 class ManageCoursePage extends React.Component {
   constructor(props, context) {
@@ -13,12 +15,12 @@ class ManageCoursePage extends React.Component {
     };
 
     this.updateCourseState = this.updateCourseState.bind(this);
-    this.saveCourse = this.saveCourse.bind(this);
+    this.onSaveCourse = this.onSaveCourse.bind(this);
   }
 
   //Called when props has changed or when react believes that props may have changed, i.e. may run when props actually hasn't changed.
   componentWillReceiveProps(nextProps) {
-    if (this.props.initialCourse.id != nextProps.initialCourse.id) {
+    if (this.props.initialCourse.id !== nextProps.initialCourse.id) {
       //Necessary to populate form when existing course is loaded directly.
       this.setState({course: Object.assign({}, nextProps.initialCourse)});
     }
@@ -31,10 +33,11 @@ class ManageCoursePage extends React.Component {
     return this.setState({course: course});
   }
 
-  saveCourse(event) {
+  onSaveCourse(event) {
     event.preventDefault();
-    this.props.actions.saveCourse(this.state.course);
-    this.context.router.push('/courses');
+    this.props.actions
+      .saveCourse(this.state.course)
+      .then(() => this.context.router.push('/courses'));
   }
 
 
@@ -45,7 +48,7 @@ class ManageCoursePage extends React.Component {
         course={this.state.course}
         errors={this.state.errors}
         onChange={this.updateCourseState}
-        onSave={this.saveCourse}
+        onSave={this.onSaveCourse}
       />
     );
   }
@@ -82,19 +85,29 @@ function mapStateToProps(state, ownProps) {
 }
 
 function getCourseById(courses, courseId) {
-  const course = courses.filter( course => course.id == courseId);
+  const course = courses.filter( course => course.id === courseId);
   if (course.length > 0) {
     return course[0];
   }
   return null;
 }
 
-function mapStateToDispatch(dispatch) {
+
+/*
+Manually mapping dispatch to props works, but then we don't get promises, as opposed to when using 'bindActionCreators'
+function mapDispatchToProps(dispatch) {
   return {
     actions: {
       saveCourse: course => { dispatch(saveCourse(course));}
     }
   };
 }
+*/
 
-export default connect(mapStateToProps, mapStateToDispatch)(ManageCoursePage);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(courseActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
